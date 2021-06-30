@@ -32,8 +32,8 @@ for weather in data['days']:
     i += 1
 """Converting Dict to DataFrame"""
 
-weather_dataframe = pd.DataFrame.from_dict(Weather_dict, 
-                orient='index', columns=['Date', 'Temp'])
+weather_dataframe = (pd.DataFrame.from_dict(Weather_dict, 
+                     orient='index', columns=['Date', 'Temp']))
 
 engine = create_engine('mysql://root:codio@localhost/Weather')
 
