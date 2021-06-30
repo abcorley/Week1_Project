@@ -4,11 +4,12 @@ import pandas as pd
 import sqlalchemy
 from sqlalchemy import create_engine
 
+
 def get_info():
     api_key = input('Enter API Key:')
     location = input('Enter a city: ')
     return api_key, location
-  
+
 def create_URL(api_key, location):
     BASE_URL = 'https://weather.visualcrossing.com/VisualCrossingWebServices'
     BASE_URL2 = '/rest/services/timeline/'
@@ -18,6 +19,7 @@ def get_data(URL):
     response = requests.get(URL)
     return response.json()
 
+  
 """Days key includes daily info:
       datetime: yyyy-mm-dd
       temp,
@@ -47,8 +49,9 @@ def create_Table(dataFrame, location):
 
 if __name__ == "__main__":
     key, location = get_info()
-    url = create_URL(key,location)
+    url = create_URL(key, location)
     data = get_data(url)
     dictionary = create_Dict(data)
     df = dict_to_dataframes(dictionary)
     create_Table(df, location)
+    
