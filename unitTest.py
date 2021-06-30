@@ -7,8 +7,7 @@ class unitTest(unittest.TestCase):
         key, location = get_info()
         self.assertEqual(len(key), 25)
         self.assertNotEquals(location, '')
-    
-    
+        
     def test_get_data(self):
         key, location = get_info()
         url = create_URL(key, location)
@@ -18,4 +17,3 @@ class unitTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-    
