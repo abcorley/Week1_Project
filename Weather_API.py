@@ -10,7 +10,7 @@ def get_info():
     location = input('Enter a city: ')
     return api_key, location
 
-  
+
 def create_URL(api_key, location):
     BASE_URL = 'https://weather.visualcrossing.com/VisualCrossingWebServices'
     BASE_URL2 = '/rest/services/timeline/'
@@ -31,6 +31,7 @@ def get_data(URL):
 """
 """Creating a dictionary to load data from API"""
 
+
 def create_Dict(data):
     Weather_dict = {}
     i = 1
@@ -38,8 +39,10 @@ def create_Dict(data):
         Weather_dict[i] = [weather['datetime'], weather['temp']]
         i += 1
     return Weather_dict
-  
+
+
 """Converting Dict to DataFrame"""
+
 
 def dict_to_dataframes(dictionary):
     return pd.DataFrame.from_dict(dictionary,
@@ -48,6 +51,7 @@ def dict_to_dataframes(dictionary):
 def create_Table(dataFrame, location):
     engine = create_engine('mysql://root:codio@localhost/Weather')
     dataFrame.to_sql(location, con=engine, if_exists='replace', index=False)
+
 
 if __name__ == "__main__":
     key, location = get_info()
