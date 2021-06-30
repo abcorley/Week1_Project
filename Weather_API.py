@@ -1,7 +1,9 @@
 import requests
-import json 
+import json
 
-BASE_URL = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/'
+BASE_URL = 'https://weather.visualcrossing.com/VisualCrossingWebServices'
+
+BASE_URL2 = '/rest/services/timeline/'
 
 API_Key = 'LCRCQE8SWKLGXT6837WYWGATZ'
 
@@ -13,7 +15,7 @@ Date2 = '2020-07-02'
 
 """for 15 day forcatse instead of Date1 and Date2 use timeline"""
 
-response = requests.get(BASE_URL + Location + '/' + Date1 + '/' + Date2 + '?key=' + API_Key)
+response = requests.get(BASE_URL + Base_URL2 +  Location + '/' + Date1 + '/' + Date2 + '?key=' + API_Key)
 data = response.json()
 
 for key, value in data.items():
@@ -28,4 +30,4 @@ for key, value in data.items():
 """
 
 for weather in data['days']:
-  print(weather['datetime'], weather['temp'])
+   print(weather['datetime'], weather['temp'])
