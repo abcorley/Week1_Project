@@ -1,5 +1,8 @@
 import requests
 import json
+import pandas as pd
+import sqlalchemy
+from sqlalchemy import create_engine
 
 BASE_URL = 'https://weather.visualcrossing.com/VisualCrossingWebServices'
 
@@ -19,6 +22,20 @@ data = response.json()
       precipitation,
       etc.
 """
+"""Creating a dictionary to load data from API"""
+
+Weather_dict = {}
+i = 1
 
 for weather in data['days']:
-    print(weather['datetime'], weather['temp'])
+    Weather_dict[i] = [weather['datetime'], weather['temp']]
+    i += 1
+"""Converting Dict to DataFrame"""
+
+weather_dataframe = pd.DataFrame.from_dict(Weather_dict, orient='index', columns=['Date','Temp'])
+
+engine = create_engine('mysql://root:codio@localhost/Weather')
+
+weather_dataframe.to_sql(Location, con=engine, if_exists='replace', index=False)
+
+
