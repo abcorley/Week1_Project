@@ -19,7 +19,7 @@ def create_URL(api_key, location):
 
 def get_data(URL):
     response = requests.get(URL)
-    return response.json()
+    return response
 
 
 """Days key includes daily info:
@@ -32,7 +32,8 @@ def get_data(URL):
 """Creating a dictionary to load data from API"""
 
 
-def create_Dict(data):
+def create_Dict(response):
+    data = response.json()
     Weather_dict = {}
     i = 1
     for weather in data['days']:
@@ -56,8 +57,15 @@ def create_Table(dataFrame, location):
 
 if __name__ == "__main__":
     key, location = get_info()
+    while len(key) != 25:
+        key = input('Enter API Key:')
+    while location == '':
+        location = input('Enter a city: ')
     url = create_URL(key, location)
-    data = get_data(url)
-    dictionary = create_Dict(data)
-    df = dict_to_dataframes(dictionary)
-    create_Table(df, location)
+    response = get_data(url)
+    if response.status_code == 200:
+        dictionary = create_Dict(response)
+        df = dict_to_dataframes(dictionary)
+        create_Table(df, location)
+    else:
+      print('Could not access data')
