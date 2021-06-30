@@ -10,16 +10,18 @@ def get_info():
     location = input('Enter a city: ')
     return api_key, location
 
+  
 def create_URL(api_key, location):
     BASE_URL = 'https://weather.visualcrossing.com/VisualCrossingWebServices'
     BASE_URL2 = '/rest/services/timeline/'
     return BASE_URL + BASE_URL2 + location + '?key=' + api_key
-  
+
+
 def get_data(URL):
     response = requests.get(URL)
     return response.json()
 
-  
+
 """Days key includes daily info:
       datetime: yyyy-mm-dd
       temp,
@@ -54,4 +56,3 @@ if __name__ == "__main__":
     dictionary = create_Dict(data)
     df = dict_to_dataframes(dictionary)
     create_Table(df, location)
-    
