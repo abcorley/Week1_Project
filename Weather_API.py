@@ -47,7 +47,8 @@ def create_Dict(data):
 def dict_to_dataframes(dictionary):
     return pd.DataFrame.from_dict(dictionary,
                                   orient='index', columns=['Date', 'Temp'])
-    
+
+
 def create_Table(dataFrame, location):
     engine = create_engine('mysql://root:codio@localhost/Weather')
     dataFrame.to_sql(location, con=engine, if_exists='replace', index=False)
