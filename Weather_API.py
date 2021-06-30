@@ -13,11 +13,11 @@ Date2 = '2020-07-02'
 
 """for 15 day forcatse instead of Date1 and Date2 use timeline"""
 
-response = requests.get(BASE_URL + Location + '/' + Date1 + '/' + Date2 + '?key=' + API_Key )
+response = requests.get(BASE_URL + Location + '/' + Date1 + '/' + Date2 + '?key=' + API_Key)
 data = response.json()
 
 for key, value in data.items():
-  print(key, ':', value)
+    print(key, ':', value)
 
 """Days key includes daily info:
       datetime: yyyy-mm-dd
