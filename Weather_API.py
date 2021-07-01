@@ -1,10 +1,28 @@
+import os
 import requests
 import json
 import pandas as pd
 import sqlalchemy
 from sqlalchemy import create_engine
 
+def menu_input():
+    print('1). Have Weather.sql')
+    print('2). Do not have Weather.sql')
+    return input('Enter Option:')
 
+
+def create_database():
+    os.system('mysql -u root -pcodio -e "CREATE DATABASE IF NOT EXISTS Weather;"')
+
+
+def save_database():
+    os.system("mysqldump -u root -pcodio Weather > Weather.sql")
+
+
+def load_database():
+    os.system("mysql -u root -pcodio Weather < Weather.sql")
+  
+  
 def get_info():
     api_key = input('Enter API Key:')
     location = input('Enter a city: ')
@@ -57,6 +75,12 @@ def create_Table(dataFrame, location):
 
 """Main"""
 if __name__ == "__main__":
+    option = menu_input()
+    if option == 1:
+        load_database()
+    else:
+        create_database()
+    change_option = changes_menu()
     key, location = get_info()
     while len(key) != 25:
         key = input('Enter API Key:')
@@ -70,3 +94,4 @@ if __name__ == "__main__":
         create_Table(df, location)
     else:
         print('Could not access data')
+    save_database()
