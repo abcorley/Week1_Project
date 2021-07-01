@@ -10,7 +10,7 @@ class unitTest(unittest.TestCase):
         self.assertNotEquals(location, '')
 
     def test_get_data(self):
-        key = 'GDVTJYUO5ESFVH739JNG54OL0'
+        key = 'LCRCQE8SWKLGXT6837WYWGATZ'
         location = 'Houston'
         url = create_URL(key, location)
         response = get_data(url)
