@@ -54,7 +54,7 @@ def create_Table(dataFrame, location):
     engine = create_engine('mysql://root:codio@localhost/Weather')
     dataFrame.to_sql(location, con=engine, if_exists='replace', index=False)
 
-
+"""Main"""
 if __name__ == "__main__":
     key, location = get_info()
     while len(key) != 25:
