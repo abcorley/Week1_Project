@@ -36,12 +36,16 @@ def create_database(database_name):
 
 
 """Saves the database to a file"""
+
+
 def save_database(database_name, sql_filename):
     os.system('mysqldump -u root -pcodio ' + database_name + '>' 
               + sql_filename)
 
 
 """Loads a file into a database"""
+
+
 def load_database(database_name, sql_filename):
     os.system("mysql -u root -pcodio "+database_name+" < " + sql_filename)
 
