@@ -2,34 +2,76 @@ import os
 import requests
 import json
 import pandas as pd
+from datetime import datetime, timedelta
 import sqlalchemy
 from sqlalchemy import create_engine
 
-def menu_input():
-    print('1). Have Weather.sql')
-    print('2). Do not have Weather.sql')
-    return input('Enter Option:')
+#Contributors: Nikhil Yadav 
+
+global api_key
+api_key = 'LCRCQE8SWKLGXT6837WYWGATZ'
+
+#Determines if User wants to overwrite or update the database
+
+def menu_filesinput():
+    print('Do you have a file you want to load?')
+    return input('Enter 1 if yes and 0 if no: ')
+  
+  
+def menu_changesinput():
+    print('1). Overwrite the database')
+    print('2). Update the database')
+    print('3). Just load the database')
+    return input('Enter Option: ')
+
+#Creates a database   
+def create_database(database_name):
+    os.system('mysql -u root -pcodio -e "CREATE DATABASE IF NOT EXISTS '
+              +database_name+';"')
 
 
-def create_database():
-    os.system('mysql -u root -pcodio -e "CREATE DATABASE IF NOT EXISTS Weather;"')
+#Saves the database to a file
+def save_database(database_name, sql_filename):
+    os.system('mysqldump -u root -pcodio '+database_name+' > '+ sql_filename)
+
+    
+#Loads a file into a database 
+def load_database(database_name, sql_filename):
+    os.system("mysql -u root -pcodio "+database_name+" < " + sql_filename)
 
 
-def save_database():
-    os.system("mysqldump -u root -pcodio Weather > Weather.sql")
+def loadNewData(dataframe, table_name):
+    dataframe.sort_values(by='Date', inplace=True, ascending=False)
+    date_object = datetime.strptime(dataframe.iloc[0,0], '%Y-%m-%d')
+    date_object = date_object + timedelta(days=1)
+    recent_date = date_object.strftime("%Y-%m-%d")
+    mostRecent = get_data('https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/'+ table_name + '/' + recent_date +'/?key=' + api_key)
+    update_Dict = create_Dict(mostRecent)
+    return dict_to_dataframes(update_Dict)
 
-
-def load_database():
-    os.system("mysql -u root -pcodio Weather < Weather.sql")
+def loadDataset(database_name, table_name, filename, update=False):
+    load_database(database_name, filename)
+    engine = create_engine('mysql://root:codio@localhost/' + database_name)
+    df = pd.read_sql_table(table_name, con=engine)
+    if update:
+        return loadNewData(df, table_name)
+    else:
+        return df
   
   
 def get_info():
-    api_key = input('Enter API Key:')
     location = input('Enter a city: ')
-    return api_key, location
+    database_name = input('Enter the name of the database: ')
+    return location, database_name
 
+def get_file_info():
+    database_name = input('Enter the name of the database: ')
+    filename = input('Enter the name of the file: ')
+    table_name = input('Enter the name of the table: ')
+    return database_name, filename, table_name
+    
 
-def create_URL(api_key, location):
+def create_URL(location):
     BASE_URL = 'https://weather.visualcrossing.com/VisualCrossingWebServices'
     BASE_URL2 = '/rest/services/timeline/'
     return BASE_URL + BASE_URL2 + location + '?key=' + api_key
@@ -68,30 +110,35 @@ def dict_to_dataframes(dictionary):
                                   orient='index', columns=['Date', 'Temp'])
 
 
-def create_Table(dataFrame, location):
+def create_Table(dataFrame, location, changes='replace'):
     engine = create_engine('mysql://root:codio@localhost/Weather')
-    dataFrame.to_sql(location, con=engine, if_exists='replace', index=False)
+    dataFrame.to_sql(location, con=engine, if_exists=changes, index=False)
 
 
 """Main"""
 if __name__ == "__main__":
-    option = menu_input()
-    if option == 1:
-        load_database()
+    file_response = menu_filesinput()
+    if file_response == '1':
+        database_name, filename, table_name = get_file_info()
+        changes_response = menu_changesinput()  
+        if changes_response == '2':
+            dataframe = loadDataset(database_name, table_name, filename, update=True)
+            create_Table(dataframe, table_name, changes='append')
+        elif changes_response == '1':
+            create_database(database_name)
+            url = create_URL(table_name)
+            response = get_data(url)
+            new_dict = create_Dict(response)
+            dataframe = dict_to_dataframes(new_dict)
+            create_Table(dataframe,table_name)
+        else:
+            load_database(database_name, filename)    
     else:
-        create_database()
-    change_option = changes_menu()
-    key, location = get_info()
-    while len(key) != 25:
-        key = input('Enter API Key:')
-    while location == '':
-        location = input('Enter a city: ')
-    url = create_URL(key, location)
-    response = get_data(url)
-    if response.status_code == 200:
-        dictionary = create_Dict(response)
-        df = dict_to_dataframes(dictionary)
-        create_Table(df, location)
-    else:
-        print('Could not access data')
-    save_database()
+        location, database_name = get_info()
+        create_database(database_name)
+        url = create_URL(location)
+        response = get_data(url)
+        new_dict = create_Dict(response)
+        dataframe = dict_to_dataframes(new_dict)
+        create_Table(dataframe,location)
+    save_database(database_name, filename)
