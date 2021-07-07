@@ -72,11 +72,12 @@ def loadDataset(database_name, table_name, filename, update=False):
     else:
         return df
 
-  
+
 def get_info():
     location = input('Enter a city: ')
     database_name = input('Enter the name of the database: ')
     return location, database_name
+
 
 def get_file_info():
     database_name = input('Enter the name of the database: ')
@@ -134,9 +135,10 @@ if __name__ == "__main__":
     file_response = menu_filesinput()
     if file_response == '1':
         database_name, filename, table_name = get_file_info()
-        changes_response = menu_changesinput()  
+        changes_response = menu_changesinput()
         if changes_response == '2':
-            dataframe = loadDataset(database_name, table_name, filename, update=True)
+            dataframe = loadDataset(database_name, table_name, filename,
+                                    update=True)
             create_Table(dataframe, table_name, changes='append')
         elif changes_response == '1':
             create_database(database_name)
@@ -154,5 +156,5 @@ if __name__ == "__main__":
         response = get_data(url)
         new_dict = create_Dict(response)
         dataframe = dict_to_dataframes(new_dict)
-        create_Table(dataframe,location)
+        create_Table(dataframe, location)
     save_database(database_name, filename)
