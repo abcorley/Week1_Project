@@ -184,4 +184,3 @@ if __name__ == "__main__":
         table = input('Enter the name of the table: ')
         line_graph(table)
         analysis(table)
-        
