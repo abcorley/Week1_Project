@@ -5,6 +5,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 import sqlalchemy
 from sqlalchemy import create_engine
+import matplotlib.pyplot as plt
 
 
 """Contributors: Nikhil Yadav"""
@@ -47,7 +48,8 @@ def save_database(database_name, sql_filename):
 
 
 def load_database(database_name, sql_filename):
-    os.system("mysql -u root -pcodio "+database_name+" < " + sql_filename)
+    create_database(database_name)
+    os.system("mysql -u root -pcodio "+ database_name + " < " + sql_filename)
 
 
 def loadNewData(dataframe, table_name):
@@ -130,6 +132,22 @@ def create_Table(dataFrame, location, changes='replace'):
     dataFrame.to_sql(location, con=engine, if_exists=changes, index=False)
 
 
+def line_graph(table_name):
+    data = loadDataset(database_name, table_name, filename)
+    plt.plot(data['Date'], data['Temp'])
+    plt.title(f'Temperatures in ' + table_name)
+    plt.xlabel('Date')
+    plt.ylabel('Temperature')
+    plt.show()
+  
+
+def analysis(table_name):
+    data = loadDataset(database_name, table_name, filename)
+    print("The average temperatures is: ", data['Temp'].mean())
+    print("The highest temperatures is: ", data['Temp'].max())
+    print("The lowest temperatures is: ", data['Temp'].min())
+
+
 """Main"""
 if __name__ == "__main__":
     file_response = menu_filesinput()
@@ -140,6 +158,7 @@ if __name__ == "__main__":
             dataframe = loadDataset(database_name, table_name, filename,
                                     update=True)
             create_Table(dataframe, table_name, changes='append')
+            save_database(database_name, filename)
         elif changes_response == '1':
             create_database(database_name)
             url = create_URL(table_name)
@@ -147,6 +166,7 @@ if __name__ == "__main__":
             new_dict = create_Dict(response)
             dataframe = dict_to_dataframes(new_dict)
             create_Table(dataframe, table_name)
+            save_database(database_name, filename)
         else:
             load_database(database_name, filename)
     else:
@@ -157,4 +177,11 @@ if __name__ == "__main__":
         new_dict = create_Dict(response)
         dataframe = dict_to_dataframes(new_dict)
         create_Table(dataframe, location)
-    save_database(database_name, filename)
+        save_database(database_name, filename)
+    print('Do you want to graph the temperatures?')
+    graphResponse = input('Enter 1 for yes or 0 for no: ')
+    if graphResponse == '1':
+        table = input('Enter the name of the table: ')
+        line_graph(table)
+        analysis(table)
+        
