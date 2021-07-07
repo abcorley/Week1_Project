@@ -39,7 +39,7 @@ def create_database(database_name):
 
 
 def save_database(database_name, sql_filename):
-    os.system('mysqldump -u root -pcodio ' + database_name + '>' 
+    os.system('mysqldump -u root -pcodio ' + database_name + '>'
               + sql_filename)
 
 
@@ -57,9 +57,11 @@ def loadNewData(dataframe, table_name):
     recent_date = date_object.strftime("%Y-%m-%d")
     mostRecent = get_data('https://weather.visualcrossing.com/'
                           + 'VisualCrossingWebServices/rest/services/timeline/'
-                          + table_name + '/' + recent_date + '/?key=' + api_key)
+                          + table_name + '/' + recent_date + '/?key='
+                          + api_key)
     update_Dict = create_Dict(mostRecent)
     return dict_to_dataframes(update_Dict)
+
 
 def loadDataset(database_name, table_name, filename, update=False):
     load_database(database_name, filename)
@@ -69,7 +71,7 @@ def loadDataset(database_name, table_name, filename, update=False):
         return loadNewData(df, table_name)
     else:
         return df
-  
+
   
 def get_info():
     location = input('Enter a city: ')
@@ -142,7 +144,7 @@ if __name__ == "__main__":
             response = get_data(url)
             new_dict = create_Dict(response)
             dataframe = dict_to_dataframes(new_dict)
-            create_Table(dataframe,table_name)
+            create_Table(dataframe, table_name)
         else:
             load_database(database_name, filename)    
     else:
