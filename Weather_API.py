@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import sqlalchemy
 from sqlalchemy import create_engine
 
+
 #Contributors: Nikhil Yadav 
 
 global api_key
@@ -16,7 +17,7 @@ api_key = 'LCRCQE8SWKLGXT6837WYWGATZ'
 def menu_filesinput():
     print('Do you have a file you want to load?')
     return input('Enter 1 if yes and 0 if no: ')
-  
+
   
 def menu_changesinput():
     print('1). Overwrite the database')
