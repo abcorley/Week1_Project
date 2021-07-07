@@ -4,9 +4,7 @@ from Weather_API import get_info, create_URL, get_data
 
 class unitTest(unittest.TestCase):
     def test_get_info(self):
-        key = 'GDVTJYUO5ESFVH739JNG54OL0'
         location = 'Houston'
-        self.assertEqual(len(key), 25)
         self.assertNotEquals(location, '')
 
     def test_get_data(self):
