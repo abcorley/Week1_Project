@@ -14,16 +14,18 @@ api_key = 'LCRCQE8SWKLGXT6837WYWGATZ'
 
 """Determines if User wants to overwrite or update the database"""
 
+
 def menu_filesinput():
     print('Do you have a file you want to load?')
     return input('Enter 1 if yes and 0 if no: ')
 
-  
+
 def menu_changesinput():
     print('1). Overwrite the database')
     print('2). Update the database')
     print('3). Just load the database')
     return input('Enter Option: ')
+
 
 """Creates a database""" 
 def create_database(database_name):
@@ -33,7 +35,7 @@ def create_database(database_name):
 
 """Saves the database to a file"""
 def save_database(database_name, sql_filename):
-    os.system('mysqldump -u root -pcodio '+database_name+' > '+ sql_filename)
+    os.system('mysqldump -u root -pcodio '+ database_name +' > '+ sql_filename)
 
     
 #Loads a file into a database 
