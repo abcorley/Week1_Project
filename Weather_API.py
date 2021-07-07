@@ -49,7 +49,7 @@ def save_database(database_name, sql_filename):
 
 def load_database(database_name, sql_filename):
     create_database(database_name)
-    os.system("mysql -u root -pcodio "+ database_name + " < " + sql_filename)
+    os.system("mysql -u root -pcodio " + database_name + " < " + sql_filename)
 
 
 def loadNewData(dataframe, table_name):
@@ -139,7 +139,7 @@ def line_graph(table_name):
     plt.xlabel('Date')
     plt.ylabel('Temperature')
     plt.show()
-  
+
 
 def analysis(table_name):
     data = loadDataset(database_name, table_name, filename)
