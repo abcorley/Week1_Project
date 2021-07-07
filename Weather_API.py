@@ -84,7 +84,7 @@ def get_file_info():
     filename = input('Enter the name of the file: ')
     table_name = input('Enter the name of the table: ')
     return database_name, filename, table_name
-    
+
 
 def create_URL(location):
     BASE_URL = 'https://weather.visualcrossing.com/VisualCrossingWebServices'
@@ -148,7 +148,7 @@ if __name__ == "__main__":
             dataframe = dict_to_dataframes(new_dict)
             create_Table(dataframe, table_name)
         else:
-            load_database(database_name, filename)    
+            load_database(database_name, filename) 
     else:
         location, database_name = get_info()
         create_database(database_name)
