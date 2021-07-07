@@ -27,7 +27,7 @@ def menu_changesinput():
     return input('Enter Option: ')
 
 
-"""Creates a database""" 
+"""Creates a database"""
 def create_database(database_name):
     os.system('mysql -u root -pcodio -e "CREATE DATABASE IF NOT EXISTS '
               + database_name+';"')
@@ -35,17 +35,17 @@ def create_database(database_name):
 
 """Saves the database to a file"""
 def save_database(database_name, sql_filename):
-    os.system('mysqldump -u root -pcodio '+ database_name +' > '+ sql_filename)
+    os.system('mysqldump -u root -pcodio ' + database_name + '>' + sql_filename)
 
-    
-#Loads a file into a database 
+
+"""Loads a file into a database"""
 def load_database(database_name, sql_filename):
     os.system("mysql -u root -pcodio "+database_name+" < " + sql_filename)
 
 
 def loadNewData(dataframe, table_name):
     dataframe.sort_values(by='Date', inplace=True, ascending=False)
-    date_object = datetime.strptime(dataframe.iloc[0,0], '%Y-%m-%d')
+    date_object = datetime.strptime(dataframe.iloc[0, 0], '%Y-%m-%d')
     date_object = date_object + timedelta(days=1)
     recent_date = date_object.strftime("%Y-%m-%d")
     mostRecent = get_data('https://weather.visualcrossing.com/'
