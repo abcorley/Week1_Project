@@ -28,6 +28,8 @@ def menu_changesinput():
 
 
 """Creates a database"""
+
+
 def create_database(database_name):
     os.system('mysql -u root -pcodio -e "CREATE DATABASE IF NOT EXISTS '
               + database_name+';"')
@@ -35,7 +37,8 @@ def create_database(database_name):
 
 """Saves the database to a file"""
 def save_database(database_name, sql_filename):
-    os.system('mysqldump -u root -pcodio ' + database_name + '>' + sql_filename)
+    os.system('mysqldump -u root -pcodio ' + database_name + '>' 
+              + sql_filename)
 
 
 """Loads a file into a database"""
@@ -50,7 +53,7 @@ def loadNewData(dataframe, table_name):
     recent_date = date_object.strftime("%Y-%m-%d")
     mostRecent = get_data('https://weather.visualcrossing.com/'
                           + 'VisualCrossingWebServices/rest/services/timeline/'
-                          + table_name + '/' + recent_date +'/?key=' + api_key)
+                          + table_name + '/' + recent_date + '/?key=' + api_key)
     update_Dict = create_Dict(mostRecent)
     return dict_to_dataframes(update_Dict)
 
